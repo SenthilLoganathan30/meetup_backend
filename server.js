@@ -5,18 +5,30 @@ const http = require('http');
 const { Server } = require('socket.io');
 const { insertTranscript, getTranscripts, saveSummary, getSummary, recordJoin, recordLeave, getAttendance, searchTranscripts } = require('./db');
 
+const fs = require('fs');
+
 const app = express();
 const server = http.createServer(app);
+
+const allowedOrigins = ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174'];
+if (process.env.FRONTEND_URL) {
+  const customOrigins = process.env.FRONTEND_URL.split(',').map(url => url.trim());
+  allowedOrigins.push(...customOrigins);
+}
+
 const io = new Server(server, {
   cors: {
-    origin: ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174'],
+    origin: allowedOrigins,
     methods: ['GET', 'POST']
   }
 });
 
 const PORT = process.env.PORT || 3000;
 
-app.use(express.static(path.join(__dirname, '..', 'client', 'public')));
+const clientPublicPath = path.join(__dirname, '..', 'client', 'public');
+if (fs.existsSync(clientPublicPath)) {
+  app.use(express.static(clientPublicPath));
+}
 
 // Simple room map: roomId -> { hostId, members: Map<socketId, userInfo> }
 // userInfo: { id, name, isMuted, isVideoOff, isSharingScreen }
