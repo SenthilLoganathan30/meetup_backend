@@ -1,6 +1,5 @@
 require('dotenv').config();
 const { Pool } = require('pg');
-const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
 const usePostgres = !!process.env.DATABASE_URL;
@@ -44,6 +43,7 @@ if (usePostgres) {
   `).catch(err => console.error('Error creating PG tables', err));
 
 } else {
+  const sqlite3 = require('sqlite3').verbose();
   const dbPath = path.resolve(__dirname, 'meetings.db');
   sqliteDb = new sqlite3.Database(dbPath, (err) => {
     if (err) {
