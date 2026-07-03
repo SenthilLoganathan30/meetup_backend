@@ -42,6 +42,10 @@ if (fs.existsSync(clientPublicPath)) {
   app.use(express.static(clientPublicPath));
 }
 
+app.get('/', (req, res) => {
+  res.status(200).send('Meetup Backend is running successfully!');
+});
+
 // Simple room map: roomId -> { hostId, members: Map<socketId, userInfo> }
 // userInfo: { id, name, isMuted, isVideoOff, isSharingScreen }
 const rooms = new Map();
