@@ -1,9 +1,15 @@
 require('dotenv').config();
+console.log('--- DATABASE CONNECTION DIAGNOSTICS ---');
+console.log('DATABASE_URL env var:', process.env.DATABASE_URL ? `Defined (length: ${process.env.DATABASE_URL.length})` : 'Undefined');
+console.log('PostgreSQL env var:', process.env.PostgreSQL ? `Defined (length: ${process.env.PostgreSQL.length})` : 'Undefined');
+
 const { Pool } = require('pg');
 const path = require('path');
 
 const databaseUrl = process.env.DATABASE_URL || process.env.PostgreSQL;
 const usePostgres = !!databaseUrl;
+console.log('usePostgres resolved to:', usePostgres);
+console.log('---------------------------------------');
 
 let pgPool;
 let sqliteDb;
