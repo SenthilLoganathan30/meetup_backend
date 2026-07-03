@@ -12,7 +12,13 @@ const server = http.createServer(app);
 
 const allowedOrigins = ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174'];
 if (process.env.FRONTEND_URL) {
-  const customOrigins = process.env.FRONTEND_URL.split(',').map(url => url.trim());
+  const customOrigins = process.env.FRONTEND_URL.split(',').map(url => {
+    let clean = url.trim();
+    if (clean.endsWith('/')) {
+      clean = clean.slice(0, -1);
+    }
+    return clean;
+  });
   allowedOrigins.push(...customOrigins);
 }
 
