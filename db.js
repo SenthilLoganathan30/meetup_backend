@@ -2,14 +2,15 @@ require('dotenv').config();
 const { Pool } = require('pg');
 const path = require('path');
 
-const usePostgres = !!process.env.DATABASE_URL;
+const databaseUrl = process.env.DATABASE_URL || process.env.PostgreSQL;
+const usePostgres = !!databaseUrl;
 
 let pgPool;
 let sqliteDb;
 
 if (usePostgres) {
   pgPool = new Pool({
-    connectionString: process.env.DATABASE_URL,
+    connectionString: databaseUrl,
     ssl: {
       rejectUnauthorized: false
     }
